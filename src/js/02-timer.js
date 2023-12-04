@@ -6,6 +6,10 @@ const daysSpan = document.querySelector('span[data-days]');
 const hoursSpan = document.querySelector('span[data-hours]');
 const minutesSpan = document.querySelector('span[data-minutes]');
 const secondsSpan = document.querySelector('span[data-seconds]');
+const startBtn = document.querySelector('button[data-start]')
+let selected; // variable to extract selectedDates from object
+
+startBtn.disabled = true; // default state
 
 const options = {
   enableTime: true,
@@ -13,36 +17,43 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
     onClose(selectedDates) {
+        selected = selectedDates[0];
         const date = new Date();
         const difference = selectedDates[0].getTime() - date.getTime();
+        
         if (difference <= 0) {
-            Notiflix.Notify.failure('Please chose a date in the future!')
-            // window.alert('Please chose a date in the future!')
+            Notiflix.Notify.failure('Please chose a date in the future!');
             return;
         } else {
-            const timerId = setInterval(() => { // used variable to add 'stop/reset' function in future
-                const currentDate = new Date();
-                const currentDiff = selectedDates[0].getTime() - currentDate.getTime();
-                if (currentDiff < 0) {
-                    clearInterval(timerId);
-                    return;
-                } else {
-                    const { days, hours, minutes, seconds } = convertMs(currentDiff);
-                    daysSpan.innerHTML = addLeadingZero(days);
-                    hoursSpan.innerHTML = addLeadingZero(hours);
-                    minutesSpan.innerHTML = addLeadingZero(minutes);
-                    secondsSpan.innerHTML = addLeadingZero(seconds);
-                }
-            }, 1000);
+            startBtn.disabled = false;
+            startBtn.addEventListener('click', startTimer);
         }
-  },
+  }
 };
 
 flatpickr('#datetime-picker', options);
 
+function startTimer() {
+    const timerId = setInterval(() => { // used variable to stop at 0 and add 'stop/reset' function in future
+        const currentDate = new Date();
+        const currentDiff = selected.getTime() - currentDate.getTime();
+            
+        if (currentDiff < 0) {
+            clearInterval(timerId);
+            return;
+        } else {
+            const { days, hours, minutes, seconds } = convertMs(currentDiff);
+            daysSpan.innerHTML = addLeadingZero(days);
+            hoursSpan.innerHTML = addLeadingZero(hours);
+            minutesSpan.innerHTML = addLeadingZero(minutes);
+            secondsSpan.innerHTML = addLeadingZero(seconds);
+        }
+    }, 1000);
+}
+
 function addLeadingZero(value) {
     const numStr = value.toString();
-    return numStr.length < 2 ? numStr.padStart(2, '0') : numStr;
+    return numStr.length < 2 ? numStr.padStart(2, '0') : numStr
 }
 
 function convertMs(ms) {
