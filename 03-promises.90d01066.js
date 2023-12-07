@@ -1,0 +1,2 @@
+!function(){var e,n,t;document.querySelector(".form");document.querySelector(".form button[type=submit]").addEventListener("click",(function(e,n){n.preventDefault();e})),e=1,n=1e3,t=Math.random()>.3,new Promise((function(o,c){setTimeout((function(){t?o("✅ Fulfilled promise ".concat(e," in ").concat(n,"ms")):c("❌ Rejected promise ".concat(e," in ").concat(n,"ms"))}),n*e)})).then((function(e){return console.log(e)})).catch((function(e){return console.log(e)}))}();
+//# sourceMappingURL=03-promises.90d01066.js.map

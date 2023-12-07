@@ -1,0 +1,2 @@
+document.querySelector(".form");document.querySelector(".form button[type=submit]").addEventListener("click",(function(e,t){t.preventDefault();let o=1;o=e})),function(e,t){const o=Math.random()>.3;new Promise(((n,c)=>{setTimeout((()=>{o?n(`✅ Fulfilled promise ${e} in ${t}ms`):c(`❌ Rejected promise ${e} in ${t}ms`)}),t*e)})).then((e=>console.log(e))).catch((e=>console.log(e)))}(1,1e3);
+//# sourceMappingURL=03-promises.0413874f.js.map
