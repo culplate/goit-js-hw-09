@@ -28,6 +28,7 @@ function handleSubmit(event) {
     if (i === inpAmount) {
       setTimeout(() => Notiflix.Notify.info('Hello, whoever is here :)'), inpDelay);
     }
+    form.reset();
   }
 }
 

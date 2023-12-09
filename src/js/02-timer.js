@@ -40,6 +40,7 @@ function startTimer() {
             
         if (currentDiff < 0) {
             clearInterval(timerId);
+            Notiflix.Notify.info('Time is up!')
             return;
         } else {
             const { days, hours, minutes, seconds } = convertMs(currentDiff);
