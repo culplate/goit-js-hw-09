@@ -1,33 +1,45 @@
+import Notiflix from 'notiflix';
 const form = document.querySelector('.form');
 const subBtn = document.querySelector('.form button[type=submit]');
 
 subBtn.addEventListener('click', handleSubmit)
 
-// реалізувати кількість викликів функціі через рекурсію
-
-function handleSubmit(amount, event) {
+function handleSubmit(event) {
   event.preventDefault();
-  let n = 1;  // this should be connected with "position" in createPromise
-  if (n = amount) {
 
+  const formData = new FormData(form);
+  const { delay, step, amount } = Object.fromEntries(formData.entries());
+  let inpDelay = +delay;
+  let inpStep = +step;
+  let inpAmount = +amount;
+  
+  if (amount === '') {
+    Notiflix.Notify.warning('Amount field cannot be empty');
+    return;
+  }
+
+  for (let i = 1; i <= inpAmount; i++) {
+    createPromise(i, inpDelay)
+      .then(({ position, delay }) => Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`))
+      .catch(({ position, delay }) => Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`))
+    
+    inpDelay += inpStep;
+
+    if (i === inpAmount) {
+      setTimeout(() => Notiflix.Notify.info('Hello, whoever is here :)'), inpDelay);
+    }
   }
 }
 
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  const promise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
-        resolve(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        resolve({position, delay});
       } else {
-        reject(`❌ Rejected promise ${position} in ${delay}ms`);
+        reject({position, delay});
       }
-    }, delay * position)
+    }, delay)
   });
-
-  promise
-    .then(mess => console.log(mess))
-    .catch(err => console.log(err))
 }
-
-createPromise(1, 1000);
